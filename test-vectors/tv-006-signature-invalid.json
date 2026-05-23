@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_006",
+  "description": "Envelope DSSE cuja assinatura ECDSA P-256 nao verifica contra a chave do trust store (ou PAE reconstruido incorretamente).",
+  "fixture": "signatures/bad-signature.dsse.json",
+  "expected_result": "fail",
+  "expected_error_codes": ["SIGNATURE_INVALID"],
+  "notes": "[TODO] Requer integracao de verifyDsse (src/dsse.ts) ao orquestrador. Teste negativo critico: PAE incorreto NAO deve passar. Funcao verifyDsse ja implementada e testavel isoladamente."
+}

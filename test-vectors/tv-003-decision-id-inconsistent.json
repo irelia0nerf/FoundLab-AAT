@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_003",
+  "description": "DecisionEvidenceEnvelope cujo decision_id arquivado nao recomputa a partir de input_hash+policy_hash+model_hash+threshold+jurisdiction.",
+  "fixture": "decision-samples/bad-decision-id.json",
+  "expected_result": "fail",
+  "expected_error_codes": ["DECISION_ID_RECOMPUTE_FAILED"],
+  "notes": "[TODO][OQ-02] Enquanto a formula de producao nao for confirmada, o verifier emite DECISION_ID_RECOMPUTE_FAILED com severity=warning (nao-conclusivo), para nao gerar falso-negativo. Apos confirmar a formula (PRODUCTION_FORMULA_CONFIRMED=true em src/decision-id.ts), passa a blocking."
+}

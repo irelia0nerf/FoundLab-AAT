@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_010",
+  "description": "Evento com occurred_at fora do periodo de auditoria declarado para o pacote.",
+  "fixture": "mutation:timestamp-out-of-window",
+  "expected_result": "fail",
+  "expected_error_codes": ["EVENT_OUT_OF_SCOPE"],
+  "notes": "[TODO] Severidade configuravel por perfil (warning por padrao; blocking em perfil strict). Ver tabela de error codes (concept.md Secao 15)."
+}

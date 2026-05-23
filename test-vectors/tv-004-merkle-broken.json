@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_004",
+  "description": "Cadeia Merkle quebrada: ordem de eventos alterada ou evento removido, produzindo root divergente.",
+  "fixture": "mutation:reorder-or-drop-event",
+  "expected_result": "fail",
+  "expected_error_codes": ["MERKLE_ROOT_MISMATCH"],
+  "notes": "Reordenar ou remover qualquer evento altera a Merkle Tree Hash (RFC 9162-style). Confirmado: a root recomputada nao bate com o manifest."
+}

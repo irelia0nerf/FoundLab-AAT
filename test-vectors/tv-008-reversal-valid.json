@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_008",
+  "description": "ReversalEvent valido: evento decision.reversed com reversal_link apontando para um decision_id existente; assinatura e Merkle consistentes.",
+  "fixture": "fixtures/tv-008-reversal/",
+  "expected_result": "pass",
+  "expected_error_codes": [],
+  "notes": "Reversao e modelada como evento append-only (nunca edita o log). Ver OQ-13 (eventos retroativos)."
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/decision-evidence-envelope.v1.json",
+  "title": "DecisionEvidenceEnvelope",
+  "description": "Decisao Veritas com bindings. DecisionID recomputavel. Ver concept.md Secao 8.3 e 14.2.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "decision_id", "input_hash", "policy_hash", "model_hash", "threshold", "jurisdiction", "decision_type", "signature"],
+  "properties": {
+    "schema_version": { "const": "aeir.decision_evidence_envelope.v1" },
+    "decision_id": { "type": "string", "description": "DecisionID recomputavel. Contrato base: input_hash+policy_hash+model_hash+threshold+jurisdiction. TODO confirm production formula." },
+    "input_hash": { "$ref": "#/$defs/sha256" },
+    "policy_hash": { "$ref": "#/$defs/sha256" },
+    "model_hash": { "$ref": "#/$defs/sha256" },
+    "threshold": { "type": "number" },
+    "jurisdiction": { "type": "string", "pattern": "^[A-Z]{2}$" },
+    "decision_type": { "type": "string", "enum": ["approve", "deny", "review", "escalate"] },
+    "score": { "type": "number" },
+    "rationale_hash": { "$ref": "#/$defs/sha256", "description": "Rationale Commitment (sealed rationale)" },
+    "merkle_position": { "type": "integer", "minimum": 0 },
+    "reversal_link": { "type": "string", "description": "decision_id da decisao revertida, se aplicavel" },
+    "disclosure_profile": { "type": "string" },
+    "verifier_profile": { "type": "string", "enum": ["minimal", "standard", "strict"] },
+    "signature": { "type": "string" }
+  },
+  "$defs": { "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}

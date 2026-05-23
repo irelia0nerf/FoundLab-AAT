@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_009",
+  "description": "OverrideEvent valido (Burn Engine): rule.overridden com cadeia de aprovacao assinada; Merkle e schema consistentes.",
+  "fixture": "fixtures/tv-009-override/",
+  "expected_result": "pass",
+  "expected_error_codes": [],
+  "notes": "Override aparece em secao propria do dossie; mapeavel a controle via ControlMapping."
+}

@@ -1,0 +1,31 @@
+{
+  "manifest_version": "aeir.audit_package_manifest.v1",
+  "package_id": "pkg_example_valid_minimal",
+  "created_at": "2026-05-23T14:35:00.000Z",
+  "merkle_root": "sha256:a6436fdbcc87f174d0198302981625340697ad2121d35404d74c98bde3f15d33",
+  "hash_algorithm": "SHA-256",
+  "tree_size": 2,
+  "artifacts": [
+    {
+      "path": "evidence.ndjson",
+      "hash": "sha256:4d25af697bd8045b2ac552e855980c1f50951340198f234a09b8ec08b520d8bf",
+      "derived": false
+    },
+    {
+      "path": "report.md",
+      "hash": "sha256:44391d4d4ee25e5b074e796f34f8fda869a830ddaccdd3af15fa340bdf174bf2",
+      "derived": true
+    },
+    {
+      "path": "report.derivation.json",
+      "hash": "sha256:162bb1ac79477268d5492e80028806043a717522d694818004ad75bcfd2868ce",
+      "derived": true
+    },
+    {
+      "path": "schemas/audit-evidence-record.schema.json",
+      "hash": "sha256:bf4ff8bb10836276e71ec38c702b0da01b3e9a46464716d2f58d98d7b2b5f26f",
+      "derived": false
+    }
+  ],
+  "signature": "ref:signatures/manifest.dsse.json (stub neste exemplo)"
+}

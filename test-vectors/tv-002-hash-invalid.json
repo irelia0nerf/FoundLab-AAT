@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_002",
+  "description": "Evento com payload alterado apos selagem: payload_hash arquivado nao corresponde ao conteudo, e a recomputacao da Merkle root diverge do manifest.",
+  "fixture": "mutation:alter-evidence-byte",
+  "expected_result": "fail",
+  "expected_error_codes": ["HASH_MISMATCH", "MERKLE_ROOT_MISMATCH"],
+  "notes": "Qualquer alteracao em evidence.ndjson cascateia em HASH_MISMATCH (artefato do manifest) e MERKLE_ROOT_MISMATCH (root recomputada). Confirmado no selftest."
+}

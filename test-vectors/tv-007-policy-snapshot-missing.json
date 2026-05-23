@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_007",
+  "description": "DecisionEvidenceEnvelope referencia policy_hash que nao resolve para nenhum PolicySnapshot arquivado no pacote.",
+  "fixture": "mutation:remove-policy-snapshot",
+  "expected_result": "fail",
+  "expected_error_codes": ["POLICY_HASH_UNRESOLVED"],
+  "notes": "[TODO] Requer o componente policy_hashes_resolved (marcado [TODO] em src/verify.ts)."
+}

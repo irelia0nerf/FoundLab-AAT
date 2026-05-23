@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "root_hash_verified": true,
+  "signatures_verified": true,
+  "schema_valid": true,
+  "decision_ids_recomputed": true,
+  "merkle_chain_valid": true,
+  "policy_hashes_resolved": true,
+  "model_hashes_resolved": true,
+  "redaction_policy_valid": true,
+  "report_derivation_valid": true,
+  "exceptions": []
+}

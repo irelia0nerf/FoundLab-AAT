@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/audit-package-manifest.v1.json",
+  "title": "AuditPackageManifest",
+  "description": "Ancora do pacote. Enumera artefatos+hashes, declara Merkle root, assinado. Ver concept.md Secao 14.6.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "package_id", "created_at", "merkle_root", "hash_algorithm", "artifacts", "signature"],
+  "properties": {
+    "manifest_version": { "const": "aeir.audit_package_manifest.v1" },
+    "package_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "merkle_root": { "$ref": "#/$defs/sha256" },
+    "hash_algorithm": { "const": "SHA-256", "description": "RFC 9162 trata HASH como parametro do log; FoundLab fixa SHA-256 (DEC-FL)" },
+    "tree_size": { "type": "integer", "minimum": 0 },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "hash"],
+        "properties": {
+          "path": { "type": "string" },
+          "hash": { "$ref": "#/$defs/sha256" },
+          "derived": { "type": "boolean", "description": "true para views derivadas (report.*) que nao sao fonte da verdade" }
+        }
+      }
+    },
+    "signature": { "type": "string", "description": "ref a envelope DSSE em /signatures/manifest.dsse.json" }
+  },
+  "$defs": { "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/audit-evidence-record.v1.json",
+  "title": "AuditEvidenceRecord",
+  "description": "AEIR canonical evidence record. Fonte da verdade por evento. Ver concept.md Secao 14.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "event_type", "system", "occurred_at", "payload_hash"],
+  "properties": {
+    "schema_version": { "const": "aeir.audit_evidence_record.v1" },
+    "event_id": { "type": "string", "pattern": "^evt_[0-9A-HJKMNP-TV-Z]{26}$", "description": "ULID-style id com prefixo evt_" },
+    "event_type": { "type": "string", "enum": ["decision.executed", "decision.reversed", "rule.overridden", "policy.snapshot", "model.bound", "evidence.collected"] },
+    "system": { "type": "string", "enum": ["rex", "veritas", "guardian_ai", "burn_engine"] },
+    "occurred_at": { "type": "string", "format": "date-time", "description": "RFC 3339 / ISO 8601 UTC" },
+    "trace_id": { "type": "string", "pattern": "^[0-9a-f]{32}$", "description": "W3C Trace Context trace_id (OpenTelemetry)" },
+    "span_id": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "type": "string", "enum": ["service", "human", "system"] },
+        "id": { "type": "string" }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["opaque_ref", "none"] },
+        "hash": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "jurisdiction": { "type": "string", "pattern": "^[A-Z]{2}$", "description": "ISO 3166-1 alpha-2" },
+    "payload_hash": { "$ref": "#/$defs/sha256" },
+    "previous_event_hash": { "$ref": "#/$defs/sha256" },
+    "signature": { "type": "string", "description": "base64url ECDSA P-256 ou ref a envelope DSSE em /signatures" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

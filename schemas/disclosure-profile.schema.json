@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/disclosure-profile.v1.json",
+  "title": "DisclosureProfile",
+  "description": "Selective disclosure por audiencia. Campo nao listado nao aparece. Ver concept.md Secao 14.9.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "audience", "disclosed_fields"],
+  "properties": {
+    "schema_version": { "const": "aeir.disclosure_profile.v1" },
+    "profile_id": { "type": "string" },
+    "audience": { "type": "string", "enum": ["internal", "external_auditor", "regulator", "public"] },
+    "disclosed_fields": { "type": "array", "items": { "type": "string", "description": "JSON Pointer (RFC 6901)" } }
+  }
+}

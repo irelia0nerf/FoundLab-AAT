@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/redaction-policy.v1.json",
+  "title": "RedactionPolicy",
+  "description": "Regra determinista de redaction aplicada antes do render. Idempotente. Ver concept.md Secao 14.8 e 17.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "rules"],
+  "properties": {
+    "schema_version": { "const": "aeir.redaction_policy.v1" },
+    "policy_id": { "type": "string" },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field_path", "action"],
+        "properties": {
+          "field_path": { "type": "string", "description": "JSON Pointer (RFC 6901) para o campo" },
+          "action": { "type": "string", "enum": ["hash", "drop", "mask"] },
+          "salt_epoch": { "type": "string", "description": "epoca de salt para action=hash" }
+        }
+      }
+    }
+  }
+}

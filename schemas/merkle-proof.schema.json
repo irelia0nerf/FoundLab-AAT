@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/merkle-proof.v1.json",
+  "title": "MerkleProof",
+  "description": "Inclusion proof RFC 9162-style (0x00 leaf / 0x01 node). Ver concept.md Secao 8.4 e 14.10.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "leaf_index", "tree_size", "leaf_hash", "audit_path", "root_hash"],
+  "properties": {
+    "schema_version": { "const": "aeir.merkle_proof.v1" },
+    "leaf_index": { "type": "integer", "minimum": 0 },
+    "tree_size": { "type": "integer", "minimum": 1 },
+    "leaf_hash": { "$ref": "#/$defs/sha256", "description": "HASH(0x00 || record_bytes)" },
+    "audit_path": { "type": "array", "items": { "$ref": "#/$defs/sha256" }, "description": "nos irmaos do folha a raiz" },
+    "root_hash": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": { "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}

@@ -1,63 +1,78 @@
-# FoundLab Audit Author Tools — Evidence Artifact Compiler (EAC)
+# FoundLab Audit Author Tools — Evidence Artifact Compiler
 
-**Status:** `Draft / Experimental / Not Production` · **Maturity:** DML-1→DML-3 (see `docs/concept.md` §13)
+> **FoundLab does not generate audit reports from logs.**
+> **FoundLab compiles cryptographically verifiable audit artifacts from deterministic execution evidence.**
 
-> FoundLab does not generate audit reports from logs.
-> FoundLab compiles cryptographically verifiable audit artifacts from deterministic execution evidence.
+**Status:** Draft / Experimental — **DML-1→DML-3**. Não é produção. Não declara
+conformidade regulatória.
 
-The EAC turns deterministic execution evidence from Rex / Veritas / Guardian AI / Burn Engine into
-**machine-verifiable audit packages** and **human-readable dossiers derived from those packages**.
-The rendered report (PDF/HTML/MD) is never the source of truth — the canonical AEIR + manifest +
-hashes + Merkle proofs + signatures are. The model is borrowed (as engineering discipline, not as a
-standardization process) from the IETF Author Tools pipeline: `source → validate → seal → package → render → verify`.
+Compila evidência técnica bruta (logs, traces, decisões, políticas, metadados de
+modelo dos sistemas Rex / Veritas / Guardian AI / Burn Engine) em **pacotes de
+auditoria verificáveis por máquina**, dos quais o dossiê humano é uma **view
+derivada e descartável** — nunca a fonte da verdade.
 
-This is a first design draft. It does **not** declare regulatory compliance and does not replace
-auditor judgment.
-
-## What’s here
+## Pipeline (ordem canônica)
 
 ```
-docs/concept.md          Master design document (23 sections): AEIR, pipeline, verification model,
-                         mandatory test strategy, output contracts, error taxonomy, security/privacy,
-                         compliance mapping, open questions, risk register.
-schemas/                 10 JSON Schemas (2020-12): AEIR record, decision envelope, policy snapshot,
-                         model binding, control mapping, package manifest, verification result,
-                         redaction policy, disclosure profile, merkle proof.
-test-vectors/            10 executable test vectors (tv-001..tv-010) + generated real-crypto fixtures.
-cli/                     command-spec.md (language-agnostic verification contract) + CLI README.
-verifier/                Reference verifier (TypeScript / Node 22), runnable as native TS.
-references.md            Verified normative anchors (with status flags: Experimental / non-IETF / etc).
+raw logs / traces / decisions / policies / model metadata
+  → normalize → AEIR → validate → seal → package → render
+  → machine-verifiable audit package  →  human-readable audit dossier (derivado)
 ```
 
-## Quickstart (auditor)
+> **Decisão arquitetural (DEC-FL):** o `render` vem **depois** do pacote selado.
+> O renderer nunca entra na cadeia de confiança (invariante I-RENDER). Ver
+> `docs/concept.md` Seção 5.1 — esta ordem diverge deliberadamente do diagrama de
+> inspiração original.
+
+## Estrutura
+
+```
+docs/concept.md          Documento mestre (23 seções): conceito, AEIR, verificação,
+                         testes, error codes, segurança, privacidade, riscos, roadmap.
+schemas/*.schema.json    10 JSON Schemas (2020-12), validados.
+test-vectors/*.json      10 vetores de regressão (tv-001..tv-010) + README.
+src/*.ts                 Verifier de referência (TypeScript / Node 22).
+cli/command-spec.md      Spec agnóstica para reimplementação por auditor externo.
+cli/README.md            Uso do CLI.
+references/references.md  Âncoras normativas verificadas (RFCs, DSSE, SLSA).
+examples/                Pacote válido e inválido gerados pelos primitivos atuais,
+                         com a saída do verifier (.verification.json).
+```
+
+## Quickstart
 
 ```bash
-cd verifier
 npm install
-npm run make-fixture     # generate real-crypto fixtures
-npm test                 # run all 10 test vectors -> "ALL VECTORS PASSED"
-node src/index.ts verify ../test-vectors/fixtures/valid-minimal-package          # PASS, exit 0
-node src/index.ts verify ../test-vectors/fixtures/invalid-signature --json       # FAIL, exit 1
+npm run typecheck                       # tsc strict, zero erros
+npm run selftest                        # regressão: pass + 3 mutações negativas
+npm run build-example -- /tmp/pkg       # materializa um pacote válido
+npm run verify -- /tmp/pkg              # -> status: pass, exit 0
 ```
 
-No build step is required — Node 22.6+ executes TypeScript natively. `npm run typecheck` runs `tsc --noEmit`.
+Requer Node >= 22 (execução via `--experimental-strip-types`, sem build step).
 
-## Reading order
+## O que está provado vs. o que é contrato aberto
 
-1. `docs/concept.md` — start at the Abstract and the marking legend (`[FATO]`/`[ASSUMPTION]`/`[DECISÃO]`/`[RISCO]`/`[TODO]`).
-1. `cli/command-spec.md` — the verification contract (so the verdict does not depend on our tool).
-1. `verifier/` — the reference implementation and its honest list of stubs.
-1. `references.md` — sources, with maturity flags.
+**Implementado e testado** (selftest verde, tsc limpo): schema AEIR (AJV),
+unicidade de evento, recomputação de Merkle root (RFC 9162-style, domain
+separation 0x00/0x01), hash de artefatos do manifest, claim de derivação do
+relatório, e falha determinística fail-closed.
 
-## Honest status (do not skip)
+**Contrato com `[TODO]` explícito** (critério de saída DML-3, ver `docs/concept.md`
+Seções 13/20): integração da verificação DSSE ao orquestrador (`verifyDsse` já
+existe e é testável isoladamente), `policy_hashes_resolved`,
+`model_hashes_resolved`, `redaction_policy_valid`, e — crucialmente — a **fórmula
+de produção do DecisionID** (OQ-02), que permanece como contrato e NÃO foi
+inventada.
 
-- `decision_commitment` recompute uses a **STUB** 5-field formula — production formula unconfirmed (§8.2).
-- Two Merkle profiles: `rfc9162-sha256` (recommended, domain-separated) and `rexguard-legacy-v1`
-  (matches the existing NotarizationService; no domain separation; carries risk **R-12**).
-- Pipeline order diverges from the original prompt diagram on purpose: **seal/package before render**
-  (§4), enforced by the `report_derivation_valid` check.
-- Several specified error checks are not yet implemented (see `cli/command-spec.md` §6 note and §19 roadmap).
+## Avisos honestos
 
-## License
+- **Canonicalização:** `src/canonicalize.ts` não é JCS-compliant para floats
+  (RISCO R-13). Usar lib auditada em produção.
+- **RFC 9162 é Experimental** (RISCO R-09); construções Merkle idênticas à RFC 6962.
+- **DSSE não é IETF** (community spec v1.0.0); JWS é fallback possível (OQ-07).
+- **DecisionID** é stub-contrato; divergência é `warning` até OQ-02 fechar.
 
-Internal FoundLab artifact. Not for distribution outside the audit pilot without authorization.
+## Licença
+
+UNLICENSED / privado (FoundLab). Material técnico interno.

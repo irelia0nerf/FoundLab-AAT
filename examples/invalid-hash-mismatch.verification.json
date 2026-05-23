@@ -1,0 +1,30 @@
+{
+  "status": "fail",
+  "root_hash_verified": false,
+  "signatures_verified": true,
+  "schema_valid": true,
+  "decision_ids_recomputed": true,
+  "merkle_chain_valid": false,
+  "policy_hashes_resolved": true,
+  "model_hashes_resolved": true,
+  "redaction_policy_valid": true,
+  "report_derivation_valid": false,
+  "exceptions": [
+    {
+      "code": "MERKLE_ROOT_MISMATCH",
+      "severity": "blocking",
+      "message": "root recomputada (sha256:dbb8b4cf89d8f08da7a908886a9669dd0e0c8a755aced023b3cf7d00e9090f7c) difere do manifest (sha256:a6436fdbcc87f174d0198302981625340697ad2121d35404d74c98bde3f15d33)"
+    },
+    {
+      "code": "HASH_MISMATCH",
+      "severity": "blocking",
+      "evidence_ref": "evidence.ndjson",
+      "message": "hash de evidence.ndjson diverge"
+    },
+    {
+      "code": "REPORT_DERIVATION_FAILED",
+      "severity": "blocking",
+      "message": "claim de derivacao do relatorio nao bate com o AEIR"
+    }
+  ]
+}

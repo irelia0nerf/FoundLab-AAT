@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/model-binding.v1.json",
+  "title": "ModelBinding",
+  "description": "Vinculo criptografico decisao<->modelo. Ver concept.md Secao 14.4.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "model_hash", "model_id", "model_version"],
+  "properties": {
+    "schema_version": { "const": "aeir.model_binding.v1" },
+    "model_hash": { "$ref": "#/$defs/sha256" },
+    "model_id": { "type": "string" },
+    "model_version": { "type": "string" },
+    "inference_profile": { "type": "string" },
+    "drift_status": { "type": "string", "enum": ["none", "warning", "drift_detected"] },
+    "confidence_band": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "low": { "type": "number" }, "high": { "type": "number" } }
+    },
+    "model_card_ref": { "type": "string" }
+  },
+  "$defs": { "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}

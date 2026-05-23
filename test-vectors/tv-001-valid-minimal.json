@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_001",
+  "description": "Pacote valido minimo: 2 eventos AEIR, Merkle root consistente, derivacao de relatorio verificavel. Materializavel via src/build-example.ts.",
+  "fixture": "generated:build-example",
+  "expected_result": "pass",
+  "expected_error_codes": [],
+  "notes": "Caso pass canonico. O verifier valida schema, Merkle root, hashes de artefato e claim de derivacao."
+}

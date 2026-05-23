@@ -1,0 +1,8 @@
+{
+  "test_vector_id": "tv_005",
+  "description": "Pacote com RedactionPolicy aplicada corretamente: campos sensiveis hasheados/removidos de forma determinista; nenhum campo proibido aparece em view publica.",
+  "fixture": "fixtures/tv-005-redacted/",
+  "expected_result": "pass",
+  "expected_error_codes": [],
+  "notes": "[TODO] Requer o componente redaction_policy_valid (marcado [TODO] em src/verify.ts). Descritor mantido como contrato de teste para DML-3->DML-4."
+}

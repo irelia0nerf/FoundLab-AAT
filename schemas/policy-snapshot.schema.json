@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://foundlab.com.br/schemas/aeir/policy-snapshot.v1.json",
+  "title": "PolicySnapshot",
+  "description": "Captura imutavel da politica ativa. Ver concept.md Secao 14.3.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_hash", "policy_id", "captured_at", "content_ref"],
+  "properties": {
+    "schema_version": { "const": "aeir.policy_snapshot.v1" },
+    "policy_hash": { "$ref": "#/$defs/sha256", "description": "= hash do conteudo apontado por content_ref" },
+    "policy_id": { "type": "string" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "content_ref": { "type": "string", "description": "ponteiro para o conteudo da politica (URI ou path no pacote)" },
+    "version": { "type": "string" }
+  },
+  "$defs": { "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}
